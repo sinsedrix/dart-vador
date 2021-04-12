@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Modal from 'react-modal';
 
 const Cricket = ({article, timeout, onClose, players}) => {
@@ -10,15 +10,14 @@ const Cricket = ({article, timeout, onClose, players}) => {
     const [playerIndex, setPlayerIndex] = useState(0);
     const [turnIndex, setTurnIndex] = useState(0)
 
-    useEffect(() => {
-        initScores()
-    }, [players])
-
-    const initScores = () => {
+    const initScores = useCallback(() => {
         points.forEach((pt, j) =>
             players.forEach((ply,i) => 
                 setScores(prev => ({...prev, [`${ply.id},${pt}`]: 0}))))
-    }
+    }, [players, points])
+
+    useEffect(initScores, [])
+
     const addScore = (plyId, pt, nb) => {
         var key = `${plyId},${pt}`
         setScores(prev => ({...prev, [key]: scores[key] + nb}))
@@ -26,7 +25,7 @@ const Cricket = ({article, timeout, onClose, players}) => {
 
     const nextPlayer = () => {
         setPlayerIndex(prevp => {
-            if(prevp+1 == players.length) setTurnIndex(prevt => prevt + 1)
+            if(prevp+1 === players.length) setTurnIndex(prevt => prevt + 1)
             return (prevp+1)%(players.length)
         })
     }
@@ -71,7 +70,7 @@ const Cricket = ({article, timeout, onClose, players}) => {
                             <th key={ply.id}>{ply.name}</th>,
                             idx === playerIndex ?
                                 <th key="next">
-                                    <button className='action' onClick={nextPlayer}><span className="icon fa-angle-double-right"></span></button>
+                                    <button className='action' aria-label="Next player" onClick={nextPlayer}><span className="icon fa-angle-double-right"></span></button>
                                 </th> : <></>
                         ]
                     })}
@@ -81,7 +80,7 @@ const Cricket = ({article, timeout, onClose, players}) => {
                         return <tr key={pt}>
                             {players.map((ply, idx) => { 
                                 return [
-                                    <td className="score">{numberToPicto(scores[`${ply.id},${pt}`])}</td>,
+                                    <td className="score">{scores ? numberToPicto(scores[`${ply.id},${pt}`]) : ''}</td>,
                                     idx === playerIndex ? 
                                         <td>
                                             <button className='action' onClick={() => addScore(ply.id, pt, 1)}>{pt === 25 ? <span className='icon fa-bullseye'/> : pt}</button>
@@ -95,7 +94,7 @@ const Cricket = ({article, timeout, onClose, players}) => {
                     <tr>
                     {players.map((ply, idx) => { 
                         return [ 
-                            <th key={'score'+ply.id} className="score">{points.reduce((sum, pt) => sum + pt*scores[`${ply.id},${pt}`], 0)}</th>,
+                            <th key={'score'+ply.id} className="score">{scores ? points.reduce((sum, pt) => sum + pt*scores[`${ply.id},${pt}`], 0) : 0}</th>,
                             idx === playerIndex ? <th key="noscore">&nbsp;</th> : <></>
                         ]
                     })}

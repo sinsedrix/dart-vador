@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Modal from 'react-modal';
 
 const GameX01 = ({article, timeout, onClose, players, x}) => {
@@ -10,14 +10,12 @@ const GameX01 = ({article, timeout, onClose, players, x}) => {
     const [playerIndex, setPlayerIndex] = useState(0)
     const [turnIndex, setTurnIndex] = useState(0)
 
-    useEffect(() => {
-        initHits()
-    }, [players])
-
-    const initHits = () => {
+    const initHits = useCallback(() => {
         players.forEach((ply,i) => 
             setHits(prev => ({...prev, [ply.id]: [0]})))
-    }
+    }, [players])
+
+    useEffect(initHits, [])
 
     const addTurn = () => {
         setTurnIndex(prevt => {
@@ -50,7 +48,7 @@ const GameX01 = ({article, timeout, onClose, players, x}) => {
 
     const nextPlayer = () => {
         setPlayerIndex(prev => {
-            if(prev+1 == players.length) addTurn()
+            if(prev+1 === players.length) addTurn()
             return (prev+1)%(players.length)
         })
     }
@@ -78,7 +76,7 @@ const GameX01 = ({article, timeout, onClose, players, x}) => {
                             <th key={ply.id}>{ply.name}</th>,
                             idx === playerIndex ?
                                 <th key="next">
-                                    <button className='action' onClick={nextPlayer}><span className="icon fa-angle-double-right"></span></button>
+                                    <button className='action' aria-label="Next player" onClick={nextPlayer}><span className="icon fa-angle-double-right"></span></button>
                                 </th> : <></>
                         ]
                     })}

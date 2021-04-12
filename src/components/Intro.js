@@ -1,13 +1,8 @@
 import React from 'react'
-import pic01 from '../images/pic01.jpg'
+import target01 from '../images/target01.jpg'
+import target02 from '../images/target02.jpg'
 
 const Intro = ({article, timeout, onClose}) => {
-    let close = (
-        <div
-          className="close"
-          onClick={onClose}>
-        </div>
-    )
 
     return (
         <article id="intro" className={`${article === 'intro' ? 'active' : ''} ${
@@ -16,29 +11,17 @@ const Intro = ({article, timeout, onClose}) => {
           style={{ display: 'none' }}>
             <h2 className="major">Intro</h2>
             <span className="image main">
-            <img src={pic01} alt="" />
+              <img src={target01} alt="" />
             </span>
             <p>
-            Aenean ornare velit lacus, ac varius enim ullamcorper eu. Proin
-            aliquam facilisis ante interdum congue. Integer mollis, nisl amet
-            convallis, porttitor magna ullamcorper, amet egestas mauris. Ut
-            magna finibus nisi nec lacinia. Nam maximus erat id euismod egestas.
-            By the way, check out my <a href="#work">awesome work</a>.
+            Need to restore my grand father's target.
             </p>
-            <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis
-            dapibus rutrum facilisis. Class aptent taciti sociosqu ad litora
-            torquent per conubia nostra, per inceptos himenaeos. Etiam tristique
-            libero eu nibh porttitor fermentum. Nullam venenatis erat id
-            vehicula viverra. Nunc ultrices eros ut ultricies condimentum.
-            Mauris risus lacus, blandit sit amet venenatis non, bibendum vitae
-            dolor. Nunc lorem mauris, fringilla in aliquam at, euismod in
-            lectus. Pellentesque habitant morbi tristique senectus et netus et
-            malesuada fames ac turpis egestas. In non lorem sit amet elit
-            placerat maximus. Pellentesque aliquam maximus risus, vel sed
-            vehicula.
-            </p>
-            {close}
+            <span className="image main">
+              <img src={target02} alt="" />
+            </span>
+            <div className="bar">
+                <div className="icon fa-times" onClick={onClose}></div>
+            </div>
         </article>
     )
 }
