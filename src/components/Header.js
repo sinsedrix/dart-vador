@@ -1,69 +1,47 @@
-import PropTypes from 'prop-types'
 import React from 'react'
 
-const Header = props => (
-  <header id="header" style={props.timeout ? { display: 'none' } : {}}>
+const Header = ({timeout, onOpenArticle}) => (
+  <header id="header" style={timeout ? { display: 'none' } : {}}>
     <div className="logo">
-      <span className="icon fa-diamond"></span>
+      <span className="icon fa-bullseye"></span>
     </div>
     <div className="content">
       <div className="inner">
-        <h1>Dimension</h1>
+        <h1>Dart Vador</h1>
         <p>
-          A fully responsive site template designed by{' '}
-          <a href="https://html5up.net">HTML5 UP</a> and released
+          A dart counter by{' '}
+          <a href="https://github.com/sinsedrix">sinsedrix</a> and released
           <br />
           for free under the{' '}
-          <a href="https://html5up.net/license">Creative Commons</a> license.
+          <a href="https://cecill.info/">CeCILL</a> license.
         </p>
       </div>
     </div>
     <nav>
       <ul>
         <li>
-          <button
-            onClick={() => {
-              props.onOpenArticle('intro')
-            }}
-          >
+          <button onClick={() => onOpenArticle('intro')}>
             Intro
           </button>
         </li>
         <li>
-          <button
-            onClick={() => {
-              props.onOpenArticle('work')
-            }}
-          >
-            Work
+          <button onClick={() => onOpenArticle('players')}>
+            Players
           </button>
         </li>
         <li>
-          <button
-            onClick={() => {
-              props.onOpenArticle('about')
-            }}
-          >
-            About
+          <button onClick={() => onOpenArticle('game-x01')}>
+            X01
           </button>
         </li>
         <li>
-          <button
-            onClick={() => {
-              props.onOpenArticle('contact')
-            }}
-          >
-            Contact
+          <button onClick={() => onOpenArticle('game-cricket')}>
+            Cricket
           </button>
         </li>
       </ul>
     </nav>
   </header>
 )
-
-Header.propTypes = {
-  onOpenArticle: PropTypes.func,
-  timeout: PropTypes.bool,
-}
 
 export default Header

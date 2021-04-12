@@ -29,6 +29,27 @@
 		letter-spacing-heading:		0.5rem
 	);
 
+@font-face {
+  font-family: "CallieChalkFont";
+  src:url('../fonts/calliechalkfont-webfont.eot?v=1');
+  src:url('../fonts/calliechalkfont-webfont.eot?#iefix&v=1') format('embedded-opentype'),
+	  url('../fonts/calliechalkfont-webfont.woff2?v=1') format('woff2'),
+	  url('../fonts/calliechalkfont-webfont.woff?v=1') format('woff'),
+	  url('../fonts/calliechalkfont-webfont.ttf?v=1') format('truetype');
+  font-weight:normal;
+  font-style:normal
+}
+
+// Special font.
+	$sfont: (
+		family:						('CallieChalkFont', sans-serif),
+		family-fixed:				('Brush Script MT', monospace),
+		weight:						300,
+		weight-bold:				600,
+		letter-spacing:				0.2rem,
+		letter-spacing-heading:		0.5rem
+	);
+
 // Palette.
 	$palette: (
 		bg:							#1b1f22,

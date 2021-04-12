@@ -1,0 +1,22 @@
+.dv-picto {
+  background-repeat: no-repeat;
+  width: 34px;
+  height: 34px;
+  display: inline-block;
+
+  &.dv-0 {
+    background-image: url(../picto/0.svg);
+  }
+
+  &.dv-1 {
+    background-image: url(../picto/1.svg);
+  }
+
+  &.dv-2 {
+    background-image: url(../picto/2.svg);
+  }
+
+  &.dv-3 {
+    background-image: url(../picto/3.svg);
+  }
+}

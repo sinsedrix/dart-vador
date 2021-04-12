@@ -1,8 +1,8 @@
 {
-  "name": "gatsby-starter-dimension-v2",
-  "description": "Gatsby Starter - Dimension V2",
+  "name": "dart-vador",
+  "description": "Dart Vador",
   "version": "1.0.0",
-  "author": "Hunter Chang",
+  "author": "sinsedrix",
   "dependencies": {
     "gatsby": "^2.19.5",
     "gatsby-plugin-manifest": "^2.2.38",
@@ -11,12 +11,13 @@
     "node-sass": "^4.13.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "react-helmet": "^5.2.1"
+    "react-helmet": "^5.2.1",
+    "react-modal": "^3.12.1"
   },
   "keywords": [
     "gatsby"
   ],
-  "license": "MIT",
+  "license": "CeCILL",
   "scripts": {
     "build": "gatsby build",
     "develop": "gatsby develop",
@@ -28,6 +29,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gatsbyjs/gatsby-starter-default"
+    "url": "https://github.com/sinsedrix/dart-vador"
   }
 }
