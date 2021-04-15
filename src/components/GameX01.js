@@ -15,7 +15,7 @@ const GameX01 = ({article, timeout, onClose, players, x}) => {
             setHits(prev => ({...prev, [ply.id]: [0]})))
     }, [players])
 
-    useEffect(initHits, [])
+    useEffect(initHits, [players])
 
     const addTurn = () => {
         setTurnIndex(prevt => {

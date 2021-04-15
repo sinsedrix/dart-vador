@@ -16,7 +16,7 @@ const Cricket = ({article, timeout, onClose, players}) => {
                 setScores(prev => ({...prev, [`${ply.id},${pt}`]: 0}))))
     }, [players, points])
 
-    useEffect(initScores, [])
+    useEffect(initScores, [players])
 
     const addScore = (plyId, pt, nb) => {
         var key = `${plyId},${pt}`
