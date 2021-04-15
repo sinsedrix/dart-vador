@@ -1,4 +1,4 @@
-import React, {useState, useEffect, createRef} from 'react'
+import React, {useState, useEffect} from 'react'
 import Layout from '../components/layout'
 
 import Header from '../components/Header'
@@ -6,7 +6,6 @@ import Main from '../components/Main'
 import Footer from '../components/Footer'
 
 const IndexPage = () => {
-  let wrapperRef = createRef()
 
   const [stati, setStati] = useState({
     isArticleVisible: false,
@@ -25,14 +24,6 @@ const IndexPage = () => {
       setStati(prev => ({...prev, loading: ''}))
     }, 100)
   }, [])
-
-  const handleClickOutside = (event) => {
-    
-    if (wrapperRef && !wrapperRef.current === event.target && stati.isArticleVisible) {
-      console.debug('handleClickOutside', event.target, wrapperRef)
-      handleCloseArticle();
-    }
-  }
 
   const handleOpenArticle = (article) => {
     console.debug('handleOpenArticle', article)
@@ -83,9 +74,8 @@ const IndexPage = () => {
 
   return (
     <Layout>
-
       <div className={`body ${stati.loading} ${stati.isArticleVisible ? 'is-article-visible' : ''}`}>
-        <div id="wrapper" ref={wrapperRef} onClick={handleClickOutside}>
+        <div id="wrapper">
           <Header onOpenArticle={handleOpenArticle} timeout={stati.timeout} />
           <Main
             isArticleVisible={stati.isArticleVisible}

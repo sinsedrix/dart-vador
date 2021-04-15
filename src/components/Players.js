@@ -40,7 +40,7 @@ const Players = ({article, timeout, onClose, players, setPlayers}) => {
                 </tbody>
             </table>
             <div className="bar">
-                <div className="icon fa-times" onClick={onClose}></div>
+                <button tabIndex={-1} aria-label="Close" className="icon fa-times" onClick={onClose}></button>
             </div>
         </article>
     )

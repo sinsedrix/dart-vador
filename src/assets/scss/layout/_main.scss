@@ -62,44 +62,26 @@
         overflow: hidden;
         white-space: nowrap;
         margin: 0.5rem 0.5rem 0.5rem 0;
+        border-radius: 100%;
+        border: 1px solid gray;
+        padding: 0;
 
         &:before {
-          @include vendor(
-            'transition',
-            'background-color #{_duration(transition)} ease-in-out'
-          );
-          display: block;
           position: absolute;
-          top: 0;
+          top: -2px;
           left: 0;
           width: 2.5rem;
           height: 2.5rem;
           border-radius: 100%;
-          border: 1px solid gray;
-          text-align: center;
+
           font-size: 1.4rem;
           color: darkgrey;
         }
 
         &:hover {
           &:before {
-            background-color: _palette(border-bg);
+            border-radius: 100%;
             color: lightgrey;
-          }
-        }
-
-        &:active {
-          &:before {
-            background-color: _palette(border-bg-alt);
-            color: white;
-          }
-        }
-
-        &.disabled {
-          cursor: not-allowed;
-          &:before {
-            background-color: _palette(bg);
-            color: darkgrey;
           }
         }
       }

@@ -30,7 +30,6 @@ button,
   line-height: _size(element-height);
   outline: 0;
   padding: 0 1.25rem 0 (1.25rem + (_font(letter-spacing) * 0.5));
-  text-align: center;
   text-decoration: none;
   text-transform: uppercase;
   white-space: nowrap;
@@ -44,6 +43,8 @@ button,
   }
 
   &.icon {
+    box-shadow: none;
+
     &:before {
       margin-right: 0.5em;
     }
@@ -57,18 +58,6 @@ button,
 
   &.action {
     width: 4rem;
-  }
-
-  &.special {
-    background-color: _palette(fg-bold);
-    color: _palette(bg) !important;
-    font-weight: _font(weight-bold);
-
-    &:hover {
-    }
-
-    &:active {
-    }
   }
 
   &.disabled,

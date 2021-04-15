@@ -115,10 +115,10 @@ const GameX01 = ({article, timeout, onClose, players, x}) => {
                 <button onClick={hideWinner}>Ok</button>
             </Modal>
             <div className="bar">
-                <div className="icon fa-times" onClick={onClose}><span className=""></span></div>
-                <div className="icon fa-redo" onClick={()=>{}}></div>
-                <div className="icon fa-undo" onClick={()=>{}}></div>
-                <div className="icon fa-refresh" onClick={resetGame}></div>
+                <button aria-label="Close" className="icon fa-times" onClick={onClose}></button>
+                <button aria-label="Redo" className="icon fa-redo" onClick={()=>{}}></button>
+                <button aria-label="Undo" className="icon fa-undo" onClick={()=>{}}></button>
+                <button aria-label="Reset game" className="icon fa-refresh" onClick={resetGame}></button>
             </div>
         </article>
     )

@@ -20,7 +20,7 @@ const Intro = ({article, timeout, onClose}) => {
               <img src={target02} alt="" />
             </span>
             <div className="bar">
-                <div className="icon fa-times" onClick={onClose}></div>
+                <button aria-label="Close" className="icon fa-times" onClick={onClose}></button>
             </div>
         </article>
     )

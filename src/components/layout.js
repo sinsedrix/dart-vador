@@ -4,8 +4,8 @@ import '../assets/scss/main.scss'
 
 const Layout = ({ children }) => {
 
-return (
-    <div id="wrapper" className="page">
+  return (
+    <div className="page">
       <div>
         {children}
       </div>
