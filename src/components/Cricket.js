@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import Modal from 'react-modal';
+import Modal from 'react-modal'
 
 const Cricket = ({article, timeout, onClose, players}) => {
     const points = [25, 20, 19, 18, 17, 16, 15]
@@ -17,10 +17,21 @@ const Cricket = ({article, timeout, onClose, players}) => {
     }, [players, points])
 
     useEffect(initScores, [players])
+    useEffect(() => {
+        players.forEach((ply,i) => {
+            if(points.reduce((closed, pt) => closed && scores[`${ply.id},${pt}`] >= 3, true)) {
+                console.debug('showWinner', ply.name)
+                showWinner(ply)
+            }
+        })
+    }, [scores])    
 
     const addScore = (plyId, pt, nb) => {
         var key = `${plyId},${pt}`
-        setScores(prev => ({...prev, [key]: scores[key] + nb}))
+        var closed = closedPlayer(pt)
+        if(!closed || closed === plyId) {
+            setScores(prev => ({...prev, [key]: scores[key] + nb}))
+        }
     } 
 
     const nextPlayer = () => {
@@ -28,6 +39,11 @@ const Cricket = ({article, timeout, onClose, players}) => {
             if(prevp+1 === players.length) setTurnIndex(prevt => prevt + 1)
             return (prevp+1)%(players.length)
         })
+    }
+
+    const closedPlayer = (pt) => {
+        return players.reduce((clo, ply) => 
+            scores[`${ply.id},${pt}`] >= 3 ? ply.id : clo, null)
     }
 
     const showWinner = (player) => {
@@ -51,10 +67,12 @@ const Cricket = ({article, timeout, onClose, players}) => {
         var nb3 = Math.floor(val/3)
         var r = val %3
         return [
-            nb3 ? [...Array(nb3)].map((_,i)=> <span className="dv-picto dv-3" />) : <></>,
+            nb3 ? [...Array(nb3)].map((_,i)=> <span key={i} className="dv-picto dv-3" />) : <></>,
             r ? <span className={`${"dv-picto"} ${"dv-" + r}`} /> : <></>
         ]
     }
+
+    Modal.setAppElement('#___gatsby');//body
 
     return (
         <article id="game-cricket" className={`${article === 'game-cricket' ? 'active' : ''} ${
@@ -67,22 +85,22 @@ const Cricket = ({article, timeout, onClose, players}) => {
                 <thead><tr>
                     {players.map((ply, idx) => { 
                         return [
-                            <th key={ply.id}>{ply.name}</th>,
+                            <th key={`cri_${ply.id}`}>{ply.name}</th>,
                             idx === playerIndex ?
-                                <th key="next">
+                                <th key={`ncri_${ply.id}`}>
                                     <button className='action' aria-label="Next player" onClick={nextPlayer}><span className="icon fa-angle-double-right"></span></button>
                                 </th> : <></>
                         ]
                     })}
-                    </tr></thead>
+                </tr></thead>
                 <tbody>
                     {points.map((pt, sdx) => {
-                        return <tr key={pt}>
+                        return <tr key={`pt_${pt}`}>
                             {players.map((ply, idx) => { 
                                 return [
-                                    <td className="score">{scores ? numberToPicto(scores[`${ply.id},${pt}`]) : ''}</td>,
+                                    <td key={`score_${ply.id}`} className="score">{scores ? numberToPicto(scores[`${ply.id},${pt}`]) : ''}</td>,
                                     idx === playerIndex ? 
-                                        <td>
+                                        <td key={`nscore_${ply.id}`}>
                                             <button className='action' onClick={() => addScore(ply.id, pt, 1)}>{pt === 25 ? <span className='icon fa-bullseye'/> : pt}</button>
                                             <button className='action' onClick={() => addScore(ply.id, pt, 2)}>x2</button>
                                             {pt === 25 ? <></> : <button className='action' onClick={() => addScore(ply.id, pt, 3)}>x3</button>}
@@ -91,27 +109,28 @@ const Cricket = ({article, timeout, onClose, players}) => {
                             })}
                             </tr>
                     })}
-                    <tr>
-                    {players.map((ply, idx) => { 
-                        return [ 
-                            <th key={'score'+ply.id} className="score">{scores ? points.reduce((sum, pt) => sum + pt*scores[`${ply.id},${pt}`], 0) : 0}</th>,
-                            idx === playerIndex ? <th key="noscore">&nbsp;</th> : <></>
-                        ]
-                    })}
+                    <tr key="cri_total">
+                        {players.map((ply, idx) => { 
+                            return [ 
+                                <th key={`total_${ply.id}`} className="score">{scores ? points.reduce((sum, pt) => sum + pt*scores[`${ply.id},${pt}`], 0) : 0}</th>,
+                                idx === playerIndex ? <th key={`ntotal_${ply.id}`}>&nbsp;</th> : <></>
+                            ]
+                        })}
                     </tr>
                 </tbody>
                 
             </table>
             <Modal 
                 isOpen={showModal}
-                contentLabel="Winner">
-                    <h1>{winner} wins!</h1>
+                onRequestClose={hideWinner}
+                ariaHideApp={true}>
+                <h1>{winner && winner.name} wins!</h1>
                 <button onClick={hideWinner}>Ok</button>
             </Modal>
             <div className="bar">
                 <button aria-label="Close" className="icon fa-times" onClick={onClose}></button>
                 <button aria-label="Redo" className="icon fa-redo" onClick={()=>{}}></button>
-                <button aria-label="Undo" className="icon fa-undo" onClick={()=>{}}></button>
+                <button aria-label="Undo" className="icon fa-undo" onClick={() => showWinner(players[0])}></button>
                 <button aria-label="Reset game" className="icon fa-refresh" onClick={resetGame}></button>
             </div>
         </article>

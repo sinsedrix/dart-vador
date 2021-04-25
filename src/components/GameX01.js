@@ -60,7 +60,9 @@ const GameX01 = ({article, timeout, onClose, players, x}) => {
             if(newHit <= x) newHits[plyId][turnIndex] = newHit
             return newHits
         })
-    } 
+    }
+
+    Modal.setAppElement('#___gatsby');//body
 
     return (
         <article id="game-x01" className={`${article === 'game-x01' ? 'active' : ''} ${
@@ -70,12 +72,12 @@ const GameX01 = ({article, timeout, onClose, players, x}) => {
             <h2>X01</h2>
             <h3>#{turnIndex+1}</h3>
             <table>
-            <thead><tr>
+                <thead><tr>
                     {players.map((ply, idx) => { 
                         return [
-                            <th key={ply.id}>{ply.name}</th>,
+                            <th key={`x01_${ply.id}`}>{ply.name}</th>,
                             idx === playerIndex ?
-                                <th key="next">
+                                <th key={`nx01_${ply.id}`}>
                                     <button className='action' aria-label="Next player" onClick={nextPlayer}><span className="icon fa-angle-double-right"></span></button>
                                 </th> : <></>
                         ]
@@ -83,35 +85,36 @@ const GameX01 = ({article, timeout, onClose, players, x}) => {
                 </tr></thead>
                 <tbody>
                     {[...Array(Math.max(turnIndex+1, points.length))].map((_,i) => {
-                        return <tr key={i}>
+                        return <tr key={`turn_${i}`}>
                             {players.map((ply, idx) => { 
                                 return [ 
-                                    i <= turnIndex ? <td key={`t${ply.id},${i}`}>{hits[ply.id] ? hits[ply.id][i] : 0}</td> : <td></td>,
+                                    i <= turnIndex ? <td key={`hit_${ply.id}_${i}`}>{hits[ply.id] ? hits[ply.id][i] : 0}</td> : <td key={`nohit_${ply.id}_${i}`}></td>,
                                     idx === playerIndex ?
-                                        i < points.length ? <td key="pt">
-                                        <button className='action' onClick={() => addHit(ply.id, points[i], 1)}>{points[i] === 25 ? <span className='icon fa-bullseye'/> : points[i]}</button>
-                                        <button className='action' onClick={() => addHit(ply.id, points[i], 2)}>x2</button>
-                                        {points[i] === 25 ? <></> : <button className='action' onClick={() => addHit(ply.id, points[i], 3)}>x3</button>}
-                                    </td> : <td></td> : <></>
+                                        i < points.length ? <td key={`pt_${ply.id}_${i}`}>
+                                            <button className='action' onClick={() => addHit(ply.id, points[i], 1)}>{points[i] === 25 ? <span className='icon fa-bullseye'/> : points[i]}</button>
+                                            <button className='action' onClick={() => addHit(ply.id, points[i], 2)}>x2</button>
+                                            {points[i] === 25 ? <></> : <button className='action' onClick={() => addHit(ply.id, points[i], 3)}>x3</button>}
+                                        </td> : <td key={`npt_${ply.id}_${i}`}></td> : <></>
                                 ]
                             })}
                         </tr>
                     })}
-                    <tr>
-                    {players.map((ply, idx) => { 
-                        return [ 
-                            <th key={'score'+ply.id} className="score">{hits[ply.id] ? x - hits[ply.id].reduce((sum, hit) => sum + hit, 0) : x}</th>,
-                            idx === playerIndex ? <th key="noscore">&nbsp;</th> : <></>
-                        ]
-                    })}
+                    <tr key="x01_total">
+                        {players.map((ply, idx) => { 
+                            return [
+                                <th key={`score_${ply.id}`} className="score">{hits[ply.id] ? x - hits[ply.id].reduce((sum, hit) => sum + hit, 0) : x}</th>,
+                                idx === playerIndex ? <th key={`nscore_${ply.id}`}></th> : <></>
+                            ]
+                        })}
                     </tr>
                 </tbody>
                 
             </table>
             <Modal 
                 isOpen={showModal}
-                contentLabel="Winner">
-                    <h1>{winner} wins!</h1>
+                contentLabel="Winner"
+                ariaHideApp={true}>
+                <h1>{winner && winner.name} wins!</h1>
                 <button onClick={hideWinner}>Ok</button>
             </Modal>
             <div className="bar">
