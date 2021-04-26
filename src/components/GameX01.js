@@ -1,12 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import Modal from 'react-modal';
 
 const GameX01 = ({article, timeout, onClose, players, x}) => {
     const points = [25, 20, 19, 18, 17, 16, 15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
     
     const [hits, setHits] = useState({})
-    const [winner, setWinner] = useState(null)
-    const [showModal, setShowModal] = useState(false)
     const [playerIndex, setPlayerIndex] = useState(0)
     const [turnIndex, setTurnIndex] = useState(0)
 
@@ -29,17 +26,7 @@ const GameX01 = ({article, timeout, onClose, players, x}) => {
         })
     }
 
-    const showWinner = (player) => {
-        setWinner(player)
-        setShowModal(true)
-    }
-
-    const hideWinner = () => {
-        setShowModal(false)
-    }
-
     const resetGame = () => {
-        setWinner(null)
         setHits({})
         initHits()
         setPlayerIndex(0)
@@ -62,8 +49,6 @@ const GameX01 = ({article, timeout, onClose, players, x}) => {
         })
     }
 
-    Modal.setAppElement('#___gatsby');//body
-
     return (
         <article id="game-x01" className={`${article === 'game-x01' ? 'active' : ''} ${
             timeout ? 'timeout' : ''
@@ -79,7 +64,7 @@ const GameX01 = ({article, timeout, onClose, players, x}) => {
                             idx === playerIndex ?
                                 <th key={`nx01_${ply.id}`}>
                                     <button className='action' aria-label="Next player" onClick={nextPlayer}><span className="icon fa-angle-double-right"></span></button>
-                                </th> : <></>
+                                </th> : null
                         ]
                     })}
                 </tr></thead>
@@ -93,8 +78,8 @@ const GameX01 = ({article, timeout, onClose, players, x}) => {
                                         i < points.length ? <td key={`pt_${ply.id}_${i}`}>
                                             <button className='action' onClick={() => addHit(ply.id, points[i], 1)}>{points[i] === 25 ? <span className='icon fa-bullseye'/> : points[i]}</button>
                                             <button className='action' onClick={() => addHit(ply.id, points[i], 2)}>x2</button>
-                                            {points[i] === 25 ? <></> : <button className='action' onClick={() => addHit(ply.id, points[i], 3)}>x3</button>}
-                                        </td> : <td key={`npt_${ply.id}_${i}`}></td> : <></>
+                                            {points[i] === 25 ? null : <button className='action' onClick={() => addHit(ply.id, points[i], 3)}>x3</button>}
+                                        </td> : <td key={`npt_${ply.id}_${i}`}></td> : null
                                 ]
                             })}
                         </tr>
@@ -103,20 +88,13 @@ const GameX01 = ({article, timeout, onClose, players, x}) => {
                         {players.map((ply, idx) => { 
                             return [
                                 <th key={`score_${ply.id}`} className="score">{hits[ply.id] ? x - hits[ply.id].reduce((sum, hit) => sum + hit, 0) : x}</th>,
-                                idx === playerIndex ? <th key={`nscore_${ply.id}`}></th> : <></>
+                                idx === playerIndex ? <th key={`nscore_${ply.id}`}></th> : null
                             ]
                         })}
                     </tr>
                 </tbody>
-                
             </table>
-            <Modal 
-                isOpen={showModal}
-                contentLabel="Winner"
-                ariaHideApp={true}>
-                <h1>{winner && winner.name} wins!</h1>
-                <button onClick={hideWinner}>Ok</button>
-            </Modal>
+
             <div className="bar">
                 <button aria-label="Close" className="icon fa-times" onClick={onClose}></button>
                 <button aria-label="Redo" className="icon fa-redo" onClick={()=>{}}></button>

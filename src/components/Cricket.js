@@ -1,12 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import Modal from 'react-modal'
 
-const Cricket = ({article, timeout, onClose, players}) => {
+const Cricket = ({article, timeout, onClose, players, showModal }) => {
     const points = [25, 20, 19, 18, 17, 16, 15]
 
     const [scores, setScores] = useState([])
-    const [winner, setWinner] = useState(null)
-    const [showModal, setShowModal] = useState(false)
     const [playerIndex, setPlayerIndex] = useState(0);
     const [turnIndex, setTurnIndex] = useState(0)
 
@@ -20,8 +17,7 @@ const Cricket = ({article, timeout, onClose, players}) => {
     useEffect(() => {
         players.forEach((ply,i) => {
             if(points.reduce((closed, pt) => closed && scores[`${ply.id},${pt}`] >= 3, true)) {
-                console.debug('showWinner', ply.name)
-                showWinner(ply)
+                showModal('info', `${ply.name} wins!`)
             }
         })
     }, [scores])    
@@ -46,17 +42,7 @@ const Cricket = ({article, timeout, onClose, players}) => {
             scores[`${ply.id},${pt}`] >= 3 ? ply.id : clo, null)
     }
 
-    const showWinner = (player) => {
-        setWinner(player)
-        setShowModal(true)
-    }
-
-    const hideWinner = () => {
-        setShowModal(false)
-    }
-
     const resetGame = () => {
-        setWinner(null)
         setScores([])
         initScores()
         setPlayerIndex(0)
@@ -67,12 +53,10 @@ const Cricket = ({article, timeout, onClose, players}) => {
         var nb3 = Math.floor(val/3)
         var r = val %3
         return [
-            nb3 ? [...Array(nb3)].map((_,i)=> <span key={i} className="dv-picto dv-3" />) : <></>,
-            r ? <span className={`${"dv-picto"} ${"dv-" + r}`} /> : <></>
+            nb3 ? [...Array(nb3)].map((_,i)=> <span key={i} className="dv-picto dv-3" />) : null,
+            r ? <span className={`${"dv-picto"} ${"dv-" + r}`} /> : null
         ]
     }
-
-    Modal.setAppElement('#___gatsby');//body
 
     return (
         <article id="game-cricket" className={`${article === 'game-cricket' ? 'active' : ''} ${
@@ -89,7 +73,7 @@ const Cricket = ({article, timeout, onClose, players}) => {
                             idx === playerIndex ?
                                 <th key={`ncri_${ply.id}`}>
                                     <button className='action' aria-label="Next player" onClick={nextPlayer}><span className="icon fa-angle-double-right"></span></button>
-                                </th> : <></>
+                                </th> : null
                         ]
                     })}
                 </tr></thead>
@@ -103,8 +87,8 @@ const Cricket = ({article, timeout, onClose, players}) => {
                                         <td key={`nscore_${ply.id}`}>
                                             <button className='action' onClick={() => addScore(ply.id, pt, 1)}>{pt === 25 ? <span className='icon fa-bullseye'/> : pt}</button>
                                             <button className='action' onClick={() => addScore(ply.id, pt, 2)}>x2</button>
-                                            {pt === 25 ? <></> : <button className='action' onClick={() => addScore(ply.id, pt, 3)}>x3</button>}
-                                        </td> : <></>
+                                            {pt === 25 ? null : <button className='action' onClick={() => addScore(ply.id, pt, 3)}>x3</button>}
+                                        </td> : null
                                 ]
                             })}
                             </tr>
@@ -113,24 +97,18 @@ const Cricket = ({article, timeout, onClose, players}) => {
                         {players.map((ply, idx) => { 
                             return [ 
                                 <th key={`total_${ply.id}`} className="score">{scores ? points.reduce((sum, pt) => sum + pt*scores[`${ply.id},${pt}`], 0) : 0}</th>,
-                                idx === playerIndex ? <th key={`ntotal_${ply.id}`}>&nbsp;</th> : <></>
+                                idx === playerIndex ? <th key={`ntotal_${ply.id}`}>&nbsp;</th> : null
                             ]
                         })}
                     </tr>
                 </tbody>
                 
             </table>
-            <Modal 
-                isOpen={showModal}
-                onRequestClose={hideWinner}
-                ariaHideApp={true}>
-                <h1>{winner && winner.name} wins!</h1>
-                <button onClick={hideWinner}>Ok</button>
-            </Modal>
+            
             <div className="bar">
                 <button aria-label="Close" className="icon fa-times" onClick={onClose}></button>
-                <button aria-label="Redo" className="icon fa-redo" onClick={()=>{}}></button>
-                <button aria-label="Undo" className="icon fa-undo" onClick={() => showWinner(players[0])}></button>
+                <button aria-label="Redo" className="icon fa-redo" onClick={() => {}}></button>
+                <button aria-label="Undo" className="icon fa-undo" onClick={() => {}}></button>
                 <button aria-label="Reset game" className="icon fa-refresh" onClick={resetGame}></button>
             </div>
         </article>
