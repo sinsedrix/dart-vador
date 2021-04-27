@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 
-const GameX01 = ({article, timeout, onClose, players, x}) => {
+const GameX01 = ({article, timeout, onClose, players, x, showModal}) => {
     const points = [25, 20, 19, 18, 17, 16, 15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
     
     const [hits, setHits] = useState({})
@@ -40,11 +40,17 @@ const GameX01 = ({article, timeout, onClose, players, x}) => {
         })
     }
 
-    const addHit = (plyId, pt, nb) => {
+    const addHit = (ply, pt, nb) => {
         setHits(prev => { 
             var newHits = {...prev}
-            var newHit = newHits[plyId][turnIndex] + pt*nb
-            if(newHit <= x) newHits[plyId][turnIndex] = newHit
+            var newHit = newHits[ply.id][turnIndex] + pt*nb
+            if(newHit <= x) newHits[ply.id][turnIndex] = newHit
+            if (newHit === x) {
+                showModal('info', `${ply.name} wins!`)
+            }
+            if (newHit > x) {
+                showModal('warn', `Too big!`)
+            }           
             return newHits
         })
     }
@@ -76,9 +82,9 @@ const GameX01 = ({article, timeout, onClose, players, x}) => {
                                     i <= turnIndex ? <td key={`hit_${ply.id}_${i}`}>{hits[ply.id] ? hits[ply.id][i] : 0}</td> : <td key={`nohit_${ply.id}_${i}`}></td>,
                                     idx === playerIndex ?
                                         i < points.length ? <td key={`pt_${ply.id}_${i}`}>
-                                            <button className='action' onClick={() => addHit(ply.id, points[i], 1)}>{points[i] === 25 ? <span className='icon fa-bullseye'/> : points[i]}</button>
-                                            <button className='action' onClick={() => addHit(ply.id, points[i], 2)}>x2</button>
-                                            {points[i] === 25 ? null : <button className='action' onClick={() => addHit(ply.id, points[i], 3)}>x3</button>}
+                                            <button className='action' onClick={() => addHit(ply, points[i], 1)}>{points[i] === 25 ? <span className='icon fa-bullseye'/> : points[i]}</button>
+                                            <button className='action' onClick={() => addHit(ply, points[i], 2)}>x2</button>
+                                            {points[i] === 25 ? null : <button className='action' onClick={() => addHit(ply, points[i], 3)}>x3</button>}
                                         </td> : <td key={`npt_${ply.id}_${i}`}></td> : null
                                 ]
                             })}

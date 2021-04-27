@@ -15,13 +15,17 @@
   position: fixed;
   background-color: _palette(bg);
   z-index: 9999;
-  width: 30rem;
+  width: 24rem;
   top: 25%;
-  left: calc(50% - 15rem);
+  left: calc(50% - 12rem);
   padding: 1em;
 
   hr {
     margin: 1em 0;
+  }
+
+  .modal-body {
+    text-align: center;
   }
 
   .bar {
@@ -61,5 +65,9 @@
         }
       }
     }
+  }
+
+  button.action {
+    width: 3rem;
   }
 }

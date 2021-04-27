@@ -14,19 +14,15 @@ const Cricket = ({article, timeout, onClose, players, showModal }) => {
     }, [players, points])
 
     useEffect(initScores, [players])
-    useEffect(() => {
-        players.forEach((ply,i) => {
-            if(points.reduce((closed, pt) => closed && scores[`${ply.id},${pt}`] >= 3, true)) {
-                showModal('info', `${ply.name} wins!`)
-            }
-        })
-    }, [scores])    
 
-    const addScore = (plyId, pt, nb) => {
-        var key = `${plyId},${pt}`
-        var closed = closedPlayer(pt)
-        if(!closed || closed === plyId) {
+    const addScore = (ply, pt, nb) => {
+        var key = `${ply.id},${pt}`
+        var closedPly = closedPlayer(pt)
+        if(!closedPly || closedPly === ply.id) {
             setScores(prev => ({...prev, [key]: scores[key] + nb}))
+        }
+        if(points.reduce((closed, pt) => closed && scores[`${ply.id},${pt}`] >= 3, true)) {
+            showModal('info', `${ply.name} wins!`)
         }
     } 
 
@@ -85,9 +81,9 @@ const Cricket = ({article, timeout, onClose, players, showModal }) => {
                                     <td key={`score_${ply.id}`} className="score">{scores ? numberToPicto(scores[`${ply.id},${pt}`]) : ''}</td>,
                                     idx === playerIndex ? 
                                         <td key={`nscore_${ply.id}`}>
-                                            <button className='action' onClick={() => addScore(ply.id, pt, 1)}>{pt === 25 ? <span className='icon fa-bullseye'/> : pt}</button>
-                                            <button className='action' onClick={() => addScore(ply.id, pt, 2)}>x2</button>
-                                            {pt === 25 ? null : <button className='action' onClick={() => addScore(ply.id, pt, 3)}>x3</button>}
+                                            <button className='action' onClick={() => addScore(ply, pt, 1)}>{pt === 25 ? <span className='icon fa-bullseye'/> : pt}</button>
+                                            <button className='action' onClick={() => addScore(ply, pt, 2)}>x2</button>
+                                            {pt === 25 ? null : <button className='action' onClick={() => addScore(ply, pt, 3)}>x3</button>}
                                         </td> : null
                                 ]
                             })}

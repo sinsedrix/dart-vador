@@ -9,6 +9,7 @@ const Players = ({article, timeout, onClose, players, setPlayers}) => {
             id: _uniqueId('p-'),
             name: player
         }])
+        newPlayer.current.value = ""
     }
 
     const removePlayer = (plyId) => {
