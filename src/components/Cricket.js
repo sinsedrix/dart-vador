@@ -11,9 +11,24 @@ const Cricket = ({article, timeout, onClose, players, showModal }) => {
         points.forEach((pt, j) =>
             players.forEach((ply,i) => 
                 setScores(prev => ({...prev, [`${ply.id},${pt}`]: 0}))))
-    }, [players, points])
+    }, [players])
 
     useEffect(initScores, [players])
+
+    const detectGameEnd = useCallback(() => {
+        console.dir(scores)
+        if(points.reduce((allclosed, pt) => allclosed &&
+            players.reduce((closed, ply) => closed || scores[`${ply.id},${pt}`] >= 3, false), true)) {
+                var winner = players.reduce((winnerScore, ply) => {
+                    var plyTotal = totalScore(ply) 
+                    console.debug(plyTotal, winnerScore)
+                    return plyTotal > winnerScore.score ? {'player': ply, 'score': plyTotal} : winnerScore
+                }, {score: 0}).player
+                showModal('info', `${winner.name} wins!`)
+            }
+    }, [scores])
+
+    useEffect(detectGameEnd, [scores])
 
     const addScore = (ply, pt, nb) => {
         var key = `${ply.id},${pt}`
@@ -21,10 +36,7 @@ const Cricket = ({article, timeout, onClose, players, showModal }) => {
         if(!closedPly || closedPly === ply.id) {
             setScores(prev => ({...prev, [key]: scores[key] + nb}))
         }
-        if(points.reduce((closed, pt) => closed && scores[`${ply.id},${pt}`] >= 3, true)) {
-            showModal('info', `${ply.name} wins!`)
-        }
-    } 
+    }
 
     const nextPlayer = () => {
         setPlayerIndex(prevp => {
@@ -44,6 +56,8 @@ const Cricket = ({article, timeout, onClose, players, showModal }) => {
         setPlayerIndex(0)
         setTurnIndex(0)
     }
+
+    const totalScore = (ply) => points.reduce((sum, pt) => sum + pt*scores[`${ply.id},${pt}`], 0)
 
     const numberToPicto = (val) => {
         var nb3 = Math.floor(val/3)
@@ -92,7 +106,7 @@ const Cricket = ({article, timeout, onClose, players, showModal }) => {
                     <tr key="cri_total">
                         {players.map((ply, idx) => { 
                             return [ 
-                                <th key={`total_${ply.id}`} className="score">{scores ? points.reduce((sum, pt) => sum + pt*scores[`${ply.id},${pt}`], 0) : 0}</th>,
+                                <th key={`total_${ply.id}`} className="score">{scores ? totalScore(ply) : 0}</th>,
                                 idx === playerIndex ? <th key={`ntotal_${ply.id}`}>&nbsp;</th> : null
                             ]
                         })}

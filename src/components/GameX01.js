@@ -43,17 +43,19 @@ const GameX01 = ({article, timeout, onClose, players, x, showModal}) => {
     const addHit = (ply, pt, nb) => {
         setHits(prev => { 
             var newHits = {...prev}
-            var newHit = newHits[ply.id][turnIndex] + pt*nb
-            if(newHit <= x) newHits[ply.id][turnIndex] = newHit
-            if (newHit === x) {
+            var total = totalHits(ply.id) + pt*nb
+            if(total <= x) newHits[ply.id][turnIndex] += pt*nb
+            if (total === x) {
                 showModal('info', `${ply.name} wins!`)
             }
-            if (newHit > x) {
+            if (total > x) {
                 showModal('warn', `Too big!`)
             }           
             return newHits
         })
     }
+
+    const totalHits = (ply) => hits[ply.id].reduce((sum, hit) => sum + hit, 0)
 
     return (
         <article id="game-x01" className={`${article === 'game-x01' ? 'active' : ''} ${
@@ -93,7 +95,7 @@ const GameX01 = ({article, timeout, onClose, players, x, showModal}) => {
                     <tr key="x01_total">
                         {players.map((ply, idx) => { 
                             return [
-                                <th key={`score_${ply.id}`} className="score">{hits[ply.id] ? x - hits[ply.id].reduce((sum, hit) => sum + hit, 0) : x}</th>,
+                                <th key={`score_${ply.id}`} className="score">{hits[ply.id] ? x - totalHits(ply) : x}</th>,
                                 idx === playerIndex ? <th key={`nscore_${ply.id}`}></th> : null
                             ]
                         })}

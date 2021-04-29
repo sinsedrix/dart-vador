@@ -25,9 +25,9 @@ const IndexPage = () => {
   const closeModal = useCallback(() => {
     setModalProps(prev => ({...prev, type:'', text:'hidden', show: false}))
   }, [])
-  const showModal = (type, text) => {
+  const showModal = useCallback((type, text) => {
     setModalProps(prev => ({...prev, type:type, text:text, show: true}))
-  }
+  }, [])
 
   useEffect(() => { 
     setTimeout(() => {
@@ -36,7 +36,6 @@ const IndexPage = () => {
   }, [])
 
   const handleOpenArticle = (article) => {
-    console.debug('handleOpenArticle', article)
 
     setStati(prev => ({
       ...prev,
