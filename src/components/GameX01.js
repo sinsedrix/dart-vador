@@ -68,7 +68,7 @@ const GameX01 = ({article, timeout, onClose, players, x, showModal}) => {
                 <thead><tr>
                     {players.map((ply, idx) => { 
                         return [
-                            <th key={`x01_${ply.id}`}>{ply.name}</th>,
+                            <th key={`x01_${ply.id}`} className={idx === playerIndex ? 'selected-player': ''}>{ply.name}</th>,
                             idx === playerIndex ?
                                 <th key={`nx01_${ply.id}`}>
                                     <button className='action' aria-label="Next player" onClick={nextPlayer}><span className="icon fa-angle-double-right"></span></button>
